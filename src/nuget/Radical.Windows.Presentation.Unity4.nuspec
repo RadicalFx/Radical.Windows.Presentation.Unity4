@@ -16,7 +16,7 @@
         <tags>Radical Radical.Windows Unity Unity4</tags>
         <dependencies>
             <dependency id="Radical.Windows.Presentation" version="[1.1,2.0)" />
-            <dependency id="Unity" version="[3.0.1304,4.0)" />
+            <dependency id="Unity" version="[4.0,4.0.1)" />
         </dependencies>
     </metadata>
     <files>

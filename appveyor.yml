@@ -1,76 +1,26 @@
-#
-#     DEVELOPMENT BRANCH
-#
-# build in Debug mode and deploy to MyGet.org as pre-release
+version: '{build}'
+image: Visual Studio 2017
 
-- branches:
-    only:
-    - develop
+skip_branch_with_pr: true
+pull_requests:
+  do_not_increment_build_number: true
 
-  skip_tags: true
-  configuration: Debug
-  platform: Any CPU
+environment:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  NUGET_XMLDOC_MODE: skip
 
-  artifacts:
-    - path: src\build\Debug
-    - path: src\build\nuget\*.nupkg
+branches:
+  only:
+  - master
+  - /release-.*/
+  - /^\d+\.\d+\.\d+(-\S*)?$/
 
-  cache:
-    - src\packages -> src\**\packages.config
+build_script:
+- cmd: ./build.cmd
 
-  before_build:
-    - nuget restore "src\Radical.Windows.Presentation.Unity4.sln"
+test: off
 
-  build:
-    project: src\Radical.Windows.Presentation.Unity4.sln
-    verbosity: minimal
+artifacts:
+- path: ./**/*.nupkg
 
-  after_build:
-    - md "src\build\nuget"
-    - nuget pack "src\nuget\Radical.Windows.Presentation.Unity4.nuspec" -Version "%GitVersion_NuGetVersion%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
-
-  test:
-    categories:
-      except:
-      - ObjectDumper
-      - AsyncWorker
-
-  deploy: off
-
-#
-#   MASTER BRANCH
-#
-# build in Release mode and deploy to NuGet.org
-- branches:
-    only:
-    - master
-
-  skip_tags: true
-  configuration: Release
-  platform: Any CPU
-
-  artifacts:
-    - path: src\build\Release
-    - path: src\build\nuget\*.nupkg
-
-  cache:
-    - src\packages -> src\**\packages.config
-
-  before_build:
-    - nuget restore "src\Radical.Windows.Presentation.Unity4.sln"
-
-  build:
-    project: src\Radical.Windows.Presentation.Unity4.sln
-    verbosity: minimal
-
-  after_build:
-    - md "src\build\nuget"
-    - nuget pack "src\nuget\Radical.Windows.Presentation.Unity4.nuspec" -Version "%GitVersion_NuGetVersion%" -Properties "configuration=%CONFIGURATION%" -OutputDirectory "src\build\nuget"
-
-  test:
-    categories:
-      except:
-      - ObjectDumper
-      - AsyncWorker
-
-  deploy: off
+deploy: off

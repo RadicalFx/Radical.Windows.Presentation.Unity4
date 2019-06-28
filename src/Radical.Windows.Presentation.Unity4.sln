@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{135601F4-F15B-4EB2-A3F9-1385E9C1AE93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radical.Windows.Presentation.Unity4", "net45\Radical.Windows.Presentation.Unity4\Radical.Windows.Presentation.Unity4.csproj", "{6D85CAE5-BE33-4E34-BE88-6B89362C5B53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radical.Windows.Presentation.Unity4", "Radical.Windows.Presentation.Unity4\Radical.Windows.Presentation.Unity4.csproj", "{6D85CAE5-BE33-4E34-BE88-6B89362C5B53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

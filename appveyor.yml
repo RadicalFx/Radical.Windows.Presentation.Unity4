@@ -35,11 +35,7 @@
       - ObjectDumper
       - AsyncWorker
 
-  deploy:
-  - provider: Environment
-    name: MyGet feed
-    on:
-      branch: develop
+  deploy: off
 
 #
 #   MASTER BRANCH
@@ -77,16 +73,4 @@
       - ObjectDumper
       - AsyncWorker
 
-  deploy:
-  - provider: Environment
-    name: NuGet public feed
-    on:
-      branch: master
-  - provider: GitHub    
-    release: $(GitVersion_NuGetVersion)
-    description: 'Release v$(GitVersion_NuGetVersion)'
-    auth_token:
-      secure: 2ijF4OfPYfIUTunubL/Z04ogADL9sx/gKW1jMRNJnAa1OpHZpSvCKmP0gvNs8C7h
-    artifact: /.*\.nupkg/, src\build\Release.zip
-    on:
-      branch: master
+  deploy: off

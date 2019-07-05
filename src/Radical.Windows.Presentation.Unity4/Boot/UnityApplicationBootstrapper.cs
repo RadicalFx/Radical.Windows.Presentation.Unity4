@@ -13,49 +13,48 @@ namespace Topics.Radical.Windows.Presentation.Boot
     public class UnityApplicationBootstrapper : ApplicationBootstrapper
     {
         IUnityContainer container;
+        bool ownContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnityApplicationBootstrapper"/> class.
         /// </summary>
         public UnityApplicationBootstrapper()
         {
+            ownContainer = true;
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnityApplicationBootstrapper"/> class.
+        /// </summary>
+        /// <param name="existingContainer">The externally managed container to use.</param>
+        public UnityApplicationBootstrapper(IUnityContainer existingContainer)
+        {
+            container = existingContainer;
+            ownContainer = false;
         }
 
         protected override IServiceProvider CreateServiceProvider()
         {
-            //var nss = new DelegateNamingSubSystem()
-            //{
-            //	SubSystemHandler = ( s, hs ) =>
-            //	{
-            //		if ( hs.Any( h => h.ComponentModel.IsOverridable() ) )
-            //		{
-            //			var nonOverridable = hs.Except( hs.Where( h => h.ComponentModel.IsOverridable() ) );
-            //			if ( nonOverridable.Any() )
-            //			{
-            //				return nonOverridable.Single();
-            //			}
-            //		}
+            if (ownContainer)
+            {
+                container = new UnityContainer();
+            }
 
-            //		return null;
-            //	}
-            //};
+            var wrapper = new ServiceProviderWrapper(container, ownContainer);
+            container.RegisterInstance<IServiceProvider>(wrapper);
 
-            this.container = new UnityContainer();
+            if (!container.IsRegistered<IUnityContainer>())
+            {
+                container.RegisterInstance<IUnityContainer>(container);
+            }
 
-            //this.container.Kernel.AddSubSystem( SubSystemConstants.NamingKey, nss );
+            if (!container.IsRegistered<BootstrapConventions>())
+            {
+                container.RegisterType<BootstrapConventions>(new ContainerControlledLifetimeManager());
+            }
 
-            //in teoria Unity lo fa per i fatti suoi
-            //this.container.Kernel.Resolver.AddSubResolver( new ArrayResolver( this.container.Kernel, true ) );
-
-            var wrapper = new ServiceProviderWrapper(this.container);
-
-            this.container.RegisterInstance<IServiceProvider>(wrapper);
-            this.container.RegisterInstance<IUnityContainer>(this.container);
-            this.container.RegisterType<BootstrapConventions>(new ContainerControlledLifetimeManager());
-
-            this.container.AddNewExtension<SubscribeToMessageExtension>();
-            this.container.AddNewExtension<InjectViewInRegionExtension>();
+            container.AddNewExtension<SubscribeToMessageExtension>();
+            container.AddNewExtension<InjectViewInRegionExtension>();
 
             return wrapper;
         }

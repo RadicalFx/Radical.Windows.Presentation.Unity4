@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Microsoft.Practices.Unity;
+using System.Windows;
 
 namespace Topics.Radical.Windows.Presentation.Boot
 {
@@ -7,6 +8,12 @@ namespace Topics.Radical.Windows.Presentation.Boot
         where TShellView : Window
     {
         public UnityApplicationBootstrapper()
+        {
+            this.UsingAsShell<TShellView>();
+        }
+
+        public UnityApplicationBootstrapper(IUnityContainer existingContainer)
+            : base(existingContainer)
         {
             this.UsingAsShell<TShellView>();
         }

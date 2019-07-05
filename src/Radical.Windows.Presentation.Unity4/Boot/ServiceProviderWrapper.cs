@@ -5,6 +5,8 @@ namespace Topics.Radical.Windows.Presentation.Boot
 {
     class ServiceProviderWrapper : IServiceProvider, IDisposable
     {
+        bool ownContainer;
+
         #region IDisposable Members
 
         /// <summary>
@@ -22,11 +24,12 @@ namespace Topics.Radical.Windows.Presentation.Boot
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(Boolean disposing)
         {
-            if (this.Container != null)
+            if (ownContainer)
             {
-                this.Container.Dispose();
-                this.Container = null;
+                this.Container?.Dispose();
             }
+
+            this.Container = null;
         }
 
         /// <summary>
@@ -46,9 +49,11 @@ namespace Topics.Radical.Windows.Presentation.Boot
         /// Initializes a new instance of the <see cref="ServiceProviderWrapper" /> class.
         /// </summary>
         /// <param name="container">The container.</param>
-        public ServiceProviderWrapper(IUnityContainer container)
+        /// <param name="ownContainer">True if the container is entirely managed by Radical; Otherwise, false..</param>
+        public ServiceProviderWrapper(IUnityContainer container, bool ownContainer)
         {
-            this.Container = container;
+            Container = container;
+            this.ownContainer = ownContainer;
         }
 
         /// <summary>

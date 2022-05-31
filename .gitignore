@@ -25,5 +25,6 @@ x86/
 [Bb]in/
 [Oo]bj/
 
-# Visual Studio cache/options directory
+# Visual Studio & Rider cache/options directory
 .vs/
+.idea/

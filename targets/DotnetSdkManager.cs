@@ -31,7 +31,7 @@ class DotnetSdkManager
 
     async Task<(bool customSdk, string sdkPath, string sdkVersion)> EnsureRequiredSdkIsInstalled()
     {
-        var currentSdkVersion = (await ReadAsync("dotnet", "--version")).TrimEnd(Environment.NewLine.ToCharArray());
+        var currentSdkVersion = (await ReadAsync("dotnet", "--version")).StandardOutput.TrimEnd(Environment.NewLine.ToCharArray());
         var requiredSdkFile = Directory.EnumerateFiles(".", ".required-sdk", SearchOption.TopDirectoryOnly).SingleOrDefault();
 
         if (string.IsNullOrWhiteSpace(requiredSdkFile))
